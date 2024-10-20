@@ -1,3 +1,5 @@
+com\model\SocialPerformanceRecord.class
+com\code\DatabaseManagement.class
 com\model\SalesMan.class
 com\code\Main.class
 com\code\ManagePersonal.class

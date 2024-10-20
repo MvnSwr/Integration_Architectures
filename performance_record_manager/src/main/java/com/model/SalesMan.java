@@ -1,5 +1,8 @@
 package com.model;
 
+// Source: https://github.com/aldaGit/mongodbstart/blob/master/src/main/java/de/hbrs/ia/model/SalesMan.java
+// access: 20.10.2024
+
 import org.bson.Document;
 
 public class SalesMan {
@@ -43,5 +46,10 @@ public class SalesMan {
         document.append("lastname" , this.lastname );
         document.append("sid" , this.sid);
         return document;
+    }
+
+    public String toString() {
+        String s = "\nFirstname: " + firstname + "\nLastname: " + lastname + "\nid: " + sid;
+        return s;
     }
 }
