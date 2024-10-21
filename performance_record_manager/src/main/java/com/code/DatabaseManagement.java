@@ -29,14 +29,14 @@ public class DatabaseManagement implements ManagePersonal {
     }
 
     @Override
-    public void addSocialPerformanceRecord(SocialPerformanceRecord record , SalesMan salesMan ) {
+    public void addSocialPerformanceRecord(SocialPerformanceRecord record , SalesMan salesMan) {
         record.setSid(salesMan);
         this.salesmenColl.insertOne(salesMan.toDocument());
         this.performanceColl.insertOne(record.toDocument());
     }
 
     @Override
-    public SalesMan readSalesMan( int sid ) {
+    public SalesMan readSalesMan(int sid) {
         return docToSalesman(this.salesmenColl.find(Filters.eq("sid", sid)).first());
     }
 
@@ -56,13 +56,13 @@ public class DatabaseManagement implements ManagePersonal {
     }
 
     @Override
-    public List<SocialPerformanceRecord> readSocialPerformanceRecord( SalesMan salesMan ) {
+    public List<SocialPerformanceRecord> readSocialPerformanceRecord(SalesMan salesMan) {
         List<SocialPerformanceRecord> socialPerformanceRecordList = new ArrayList<>();
 
         try (MongoCursor<Document> mCursor = salesmenColl.find().iterator()) {
             while (mCursor.hasNext()) {
                 Document doc = mCursor.next();
-                if (doc.getInteger("pid") == salesMan.getId()) {
+                if (doc.getInteger("pid") == salesMan.getSid()) {
                     SocialPerformanceRecord socialPerformanceRecord = docToSocialPerformanceRecord(doc);
                     socialPerformanceRecordList.add(socialPerformanceRecord);
                 }
@@ -74,7 +74,7 @@ public class DatabaseManagement implements ManagePersonal {
 
     @Override
     public void deleteSalesMan(SalesMan salesMan) {
-        this.salesmenColl.deleteOne(Filters.eq("sid", salesMan.getId()));
+        this.salesmenColl.deleteOne(Filters.eq("sid", salesMan.getSid()));
     }
 
     @Override

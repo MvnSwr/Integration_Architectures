@@ -27,6 +27,7 @@ public interface ManagePersonal {
     // Remark: How do you integrate the year?
 
     public void deleteSalesMan(SalesMan salesMan);
+    
     public void deleteSocialPerformanceRecord(SocialPerformanceRecord socialPerformanceRecord);
 
 }

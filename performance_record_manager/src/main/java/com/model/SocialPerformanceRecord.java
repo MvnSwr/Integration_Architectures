@@ -1,8 +1,14 @@
 package com.model;
 
-import com.model.SalesMan;
 import org.bson.Document;
 
+// import lombok.AllArgsConstructor;
+// import lombok.Getter;
+// import lombok.Setter;
+
+// @Getter
+// @Setter
+// @AllArgsConstructor
 public class SocialPerformanceRecord {
     private Integer id;
     private Integer sid;
@@ -13,7 +19,7 @@ public class SocialPerformanceRecord {
     private Integer attitudeTowardsClient;
     private Integer communicationSkills;
     private Integer integrityToCompany;
-
+    ///
     public SocialPerformanceRecord(Integer id, Integer year, Integer leadershipCompetence, Integer opennessToEmployee,
                                    Integer socialBehaviourToEmployee, Integer attitudeTowardsClient,
                                    Integer communicationSkills, Integer integrityToCompany) {
@@ -40,7 +46,7 @@ public class SocialPerformanceRecord {
     }
 
     public void setSid(SalesMan salesMan) {
-        this.sid = salesMan.getId();
+        this.sid = salesMan.getSid();
     }
 
     public void setSid(Integer sid) {
@@ -102,7 +108,7 @@ public class SocialPerformanceRecord {
     public void setIntegrityToCompany(Integer integrityToCompany) {
         this.integrityToCompany = integrityToCompany;
     }
-
+    ///
     public Document toDocument() {
         org.bson.Document document = new Document();
         document.append("pid", this.id);

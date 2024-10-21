@@ -5,51 +5,60 @@ package com.model;
 
 import org.bson.Document;
 
+// import lombok.AllArgsConstructor;
+// import lombok.Getter;
+// import lombok.Setter;
+
+// @Getter
+// @Setter
+// @AllArgsConstructor
 public class SalesMan {
-    private String firstname;
-    private String lastname;
+    private String firstName;
+    private String lastName;
     private Integer sid;
 
+    ///
     public SalesMan(String firstname, String lastname, Integer sid) {
-        this.firstname = firstname;
-        this.lastname = lastname;
+        this.firstName = firstname;
+        this.lastName = lastname;
         this.sid = sid;
     }
 
-    public String getFirstname() {
-        return firstname;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
+    public void setFirstName(String firstname) {
+        this.firstName = firstname;
     }
 
-    public String getLastname() {
-        return lastname;
+    public String getLastName() {
+        return lastName;
     }
 
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
+    public void setLastName(String lastname) {
+        this.lastName = lastname;
     }
 
-    public Integer getId() {
+    public Integer getSid() {
         return sid;
     }
 
-    public void setId(Integer sid) {
+    public void setSid(Integer sid) {
         this.sid = sid;
     }
+    ///
 
     public Document toDocument() {
         org.bson.Document document = new Document();
-        document.append("firstname" , this.firstname );
-        document.append("lastname" , this.lastname );
+        document.append("firstname" , this.firstName );
+        document.append("lastname" , this.lastName );
         document.append("sid" , this.sid);
         return document;
     }
 
     public String toString() {
-        String s = "\nFirstname: " + firstname + "\nLastname: " + lastname + "\nid: " + sid;
+        String s = "\nFirstname: " + firstName + "\nLastname: " + lastName + "\nid: " + sid;
         return s;
     }
 }
