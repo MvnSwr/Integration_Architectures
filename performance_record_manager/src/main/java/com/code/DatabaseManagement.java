@@ -86,6 +86,7 @@ public class DatabaseManagement implements ManagePersonal {
     /*
     * convert from document to salesman object type.
     * */
+    
     private SalesMan docToSalesman(Document doc) {
         SalesMan sm = new SalesMan(doc.getString("firstname"), doc.getString("lastname"),
                 doc.getInteger("sid"));
@@ -112,7 +113,6 @@ public class DatabaseManagement implements ManagePersonal {
     }
 
 
-
     public MongoClient getMongoClient() {
         return mongoClient;
     }
@@ -121,10 +121,12 @@ public class DatabaseManagement implements ManagePersonal {
         return mongoDatabase;
     }
 
+    @SuppressWarnings("rawtypes")
     public MongoCollection getSalesmenColl() {
         return salesmenColl;
     }
 
+    @SuppressWarnings("rawtypes")
     public MongoCollection getPerformanceColl() {
         return performanceColl;
     }

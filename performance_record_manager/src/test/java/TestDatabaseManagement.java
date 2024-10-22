@@ -84,7 +84,7 @@ public class TestDatabaseManagement {
         DbManagement.createSalesMan(salesMan);
         SalesMan salesManClone = DbManagement.readSalesMan(11);
 
-        assertEquals(salesManClone,salesMan);
+        assertEquals(salesManClone, salesMan);
     }
 
     @Test

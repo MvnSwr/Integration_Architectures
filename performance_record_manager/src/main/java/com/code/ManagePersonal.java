@@ -5,7 +5,6 @@ package com.code;
 
 import com.model.SalesMan;
 import com.model.SocialPerformanceRecord;
-//import com.model.SocialPerformanceRecord;
 
 import java.util.List;
 

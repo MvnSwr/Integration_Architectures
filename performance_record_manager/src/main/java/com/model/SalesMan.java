@@ -5,19 +5,12 @@ package com.model;
 
 import org.bson.Document;
 
-// import lombok.AllArgsConstructor;
-// import lombok.Getter;
-// import lombok.Setter;
-
-// @Getter
-// @Setter
-// @AllArgsConstructor
 public class SalesMan {
     private String firstName;
     private String lastName;
     private Integer sid;
 
-    ///
+    
     public SalesMan(String firstname, String lastname, Integer sid) {
         this.firstName = firstname;
         this.lastName = lastname;
@@ -47,7 +40,6 @@ public class SalesMan {
     public void setSid(Integer sid) {
         this.sid = sid;
     }
-    ///
 
     public Document toDocument() {
         org.bson.Document document = new Document();

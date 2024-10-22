@@ -1,5 +1,4 @@
 import com.model.SalesMan;
-import com.model.SocialPerformanceRecord;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
