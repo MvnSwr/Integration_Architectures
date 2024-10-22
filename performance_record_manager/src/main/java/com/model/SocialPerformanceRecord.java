@@ -115,4 +115,17 @@ public class SocialPerformanceRecord {
 
         return document;
     }
+
+    public String toString(){
+        return "SocialPerformanceRecord{" +
+               "id=" + id +
+               ", year=" + year +
+               ", leadershipCompetence=" + leadershipCompetence +
+               ", opennessToEmployee=" + opennessToEmployee +
+               ", socialBehaviourToEmployee=" + socialBehaviourToEmployee +
+               ", attitudeTowardsClient=" + attitudeTowardsClient +
+               ", communicationSkills=" + communicationSkills +
+               ", integrityToCompany=" + integrityToCompany +
+               '}';
+    }
 }

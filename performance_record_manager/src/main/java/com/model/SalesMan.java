@@ -50,7 +50,8 @@ public class SalesMan {
     }
 
     public String toString() {
-        String s = "\nFirstname: " + firstName + "\nLastname: " + lastName + "\nid: " + sid;
-        return s;
+        return  "Firstname: " + firstName + 
+                "\nLastname: " + lastName + 
+                "\nid: " + sid;
     }
 }

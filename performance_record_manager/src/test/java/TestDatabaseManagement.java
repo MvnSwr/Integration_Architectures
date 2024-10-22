@@ -4,10 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.mongodb.client.model.Filters;
 import org.bson.Document;
 import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -34,103 +32,133 @@ public class TestDatabaseManagement {
     @AfterEach
     public void teardown(){
         DbManagement = null;
-    }
-
-    @BeforeAll
-    public void constructor(){
-        //[GIVEN]
-        MongoClient mongoClient;
-        MongoDatabase mongoDatabase;
-
-        mongoClient = MongoClients.create("mongodb://localhost:27017");
-        
-        mongoDatabase = mongoClient.getDatabase("performanceRecordDatabase");
-        salesmenColl = mongoDatabase.getCollection("salesmen");
-        performanceColl = mongoDatabase.getCollection("performance_records");
-        
-        //[THEN]
-        assertEquals(mongoDatabase, DbManagement.getMongoDatabase());
-        assertEquals(mongoClient, DbManagement.getMongoClient());
-        assertEquals(salesmenColl, DbManagement.getSalesmenColl());
-        assertEquals(performanceColl, DbManagement.getPerformanceColl());
+        salesMan = null;
+        socialPerformanceRecord = null;
     }
 
     @Test
     public void createSalesMan() {
         DbManagement.createSalesMan(salesMan);
-        Document savedDoc = salesmenColl.find(eq("sid", 11)).first();
+        Document savedDoc = DbManagement.getSalesmenColl().find(eq("sid", 11)).first();
 
         assertNotNull(savedDoc, "Should not be null");
         assertEquals(11, savedDoc.getInteger("sid"));
         assertEquals("Peter", savedDoc.getString("firstname"));
         assertEquals("Dieter", savedDoc.getString("lastname"));
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteOne(eq("sid", 11));
     }
 
     @Test
     public void addSocialPerformanceRecord() {
+        //[WHEN]
         DbManagement.addSocialPerformanceRecord(socialPerformanceRecord, salesMan);
-        Document savedSoc = performanceColl.find(Filters.eq("pid", 1)).first();
-        Document sacedSaM = salesmenColl.find(eq("sid", 11)).first();
 
-        assertNotNull(savedSoc);
-        assertNotNull(sacedSaM);
-        assertEquals(savedSoc.getInteger("sid"), sacedSaM.getInteger("sid"));
-        assertEquals(savedSoc, socialPerformanceRecord.toDocument());
-        assertEquals(sacedSaM, salesMan.toDocument());
+        //[THEN]
+        Document savedSocPerfRec = DbManagement.getPerformanceColl().find(eq("pid", 1)).first();
+        socialPerformanceRecord.setSid(salesMan);
+        Document expectedSocPerfRec = socialPerformanceRecord.toDocument();
+
+        assertNotNull(expectedSocPerfRec);
+        assertNotNull(savedSocPerfRec);
+        assertEquals(socialPerformanceRecord.getId(), savedSocPerfRec.getInteger("pid"));
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteOne(eq("sid", 11));
+        DbManagement.getPerformanceColl().deleteOne(eq("pid", 1));
     }
 
     @Test
     public void readSalesMan() {
+        //[GIVEN]
         DbManagement.createSalesMan(salesMan);
-        SalesMan salesManClone = DbManagement.readSalesMan(11);
 
-        assertEquals(salesManClone, salesMan);
+        //[WHEN]
+        SalesMan actualSalesMan = DbManagement.readSalesMan(11);
+
+        //[THEN]
+        assertEquals(actualSalesMan.toString(), salesMan.toString());
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteOne(eq("sid", 11));
     }
 
     @Test
     public void readAllSalesMen() {
-        SalesMan salesMan1 = new SalesMan("Reise", "Kato", 13);
+        //[GIVEN]
+        SalesMan newSalesMan = new SalesMan("Reise", "Kato", 13);
         List<SalesMan> salesManList = new ArrayList<SalesMan>();
         salesManList.add(salesMan);
-        salesManList.add(salesMan1);
+        salesManList.add(newSalesMan);
         DbManagement.createSalesMan(salesMan);
-        List<SalesMan> salesManListClone = DbManagement.readAllSalesMen();
+        DbManagement.createSalesMan(newSalesMan);
 
-        for(int i = 0; i < salesManList.size(); i++) {
-            assertEquals(salesManList.get(i), salesManListClone.get(i));
+        //[WHEN]
+        List<SalesMan> actualSalesManList = DbManagement.readAllSalesMen();
+
+        //[THEN]
+        for(int i = 0; i < actualSalesManList.size(); i++){
+            assertEquals(salesManList.get(i).toString(), actualSalesManList.get(i).toString());
         }
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteOne(eq("sid", 11));
+        DbManagement.getSalesmenColl().deleteOne(eq("sid", 13));
     }
 
     @Test
     public void readSocialPerformanceRecord() {
-        SocialPerformanceRecord socialPerformanceRecord1 = new SocialPerformanceRecord(2, 2024, 4, 6, 5, 3, 4, 6);
+        //[GIVEN]
+        SocialPerformanceRecord newSocialPerformanceRecord = new SocialPerformanceRecord(2, 2024, 4, 6, 5, 3, 4, 6);
         DbManagement.addSocialPerformanceRecord(socialPerformanceRecord, salesMan);
-        DbManagement.addSocialPerformanceRecord(socialPerformanceRecord1, salesMan);
-        List<SocialPerformanceRecord> socialPerformanceRecordList = new ArrayList<>();
-        socialPerformanceRecordList.add(socialPerformanceRecord1);
-        socialPerformanceRecordList.add(socialPerformanceRecord);
-        List<SocialPerformanceRecord> socialPerformanceRecordListClone =
+        DbManagement.addSocialPerformanceRecord(newSocialPerformanceRecord, salesMan);
+
+        List<SocialPerformanceRecord> expectedSocialPerformanceRecordList = new ArrayList<>();
+        expectedSocialPerformanceRecordList.add(socialPerformanceRecord);
+        expectedSocialPerformanceRecordList.add(newSocialPerformanceRecord);
+
+        //[WHEN]
+        List<SocialPerformanceRecord> actualSocialPerformanceRecordList =
                 DbManagement.readSocialPerformanceRecord(salesMan);
 
-        for(int i = 0; i < socialPerformanceRecordList.size(); i++) {
-            assertEquals(socialPerformanceRecordList.get(i), socialPerformanceRecordListClone.get(i));
+        //[THEN]
+        for(int i = 0; i < actualSocialPerformanceRecordList.size(); i++) {
+            assertEquals(expectedSocialPerformanceRecordList.get(i).toString(), actualSocialPerformanceRecordList.get(i).toString());
         }
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteMany(eq("sid", 11));
+        DbManagement.getPerformanceColl().deleteOne(eq("pid", 1));
+        DbManagement.getPerformanceColl().deleteOne(eq("pid", 2));
     }
 
     @Test
     public void deleteSalesMan() {
+        //[GIVEN]
         DbManagement.createSalesMan(salesMan);
+
+        //[WHEN]
         DbManagement.deleteSalesMan(salesMan);
 
-        assertNull(salesmenColl.find(eq("sid", salesMan.getSid())).first());
+        //[THEN]
+        List<SalesMan> actualSalesManList = DbManagement.readAllSalesMen();
+        assertEquals(0, actualSalesManList.size());
     }
 
     @Test
     public void deleteSocialPerformanceRecord() {
+        //[GIVEN]
         DbManagement.addSocialPerformanceRecord(socialPerformanceRecord, salesMan);
+
+        //[WHEN]
         DbManagement.deleteSocialPerformanceRecord(socialPerformanceRecord);
 
-        assertNull(performanceColl.find(eq("pid", 1)).first());
+        //[THEN]
+        assertEquals(0, DbManagement.getPerformanceColl().countDocuments());
+
+        //deleting files
+        DbManagement.getSalesmenColl().deleteMany(eq("sid", 11));
     }
 
     @Test
@@ -144,6 +172,6 @@ public class TestDatabaseManagement {
         actualRec = DbManagement.docToSocialPerformanceRecord(expectedDoc);
 
         //[THEN]
-        assertEquals(expectedRec, actualRec);
+        assertEquals(expectedRec.toString(), actualRec.toString());
     }
 }

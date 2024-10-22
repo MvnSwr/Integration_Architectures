@@ -121,13 +121,11 @@ public class DatabaseManagement implements ManagePersonal {
         return mongoDatabase;
     }
 
-    @SuppressWarnings("rawtypes")
-    public MongoCollection getSalesmenColl() {
+    public MongoCollection<Document> getSalesmenColl() {
         return salesmenColl;
     }
 
-    @SuppressWarnings("rawtypes")
-    public MongoCollection getPerformanceColl() {
+    public MongoCollection<Document> getPerformanceColl() {
         return performanceColl;
     }
 }
